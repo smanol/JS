@@ -1,1 +1,6 @@
-Hello
+steps
+
+git status
+git add . 
+git commit -m "Add a message"
+git push origin master
