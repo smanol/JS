@@ -1,26 +1,18 @@
-/* console.log("This is from a different file") */
 
-// DOM - Document Object Model
-const notes = [
-    // {},
-    {
-        title: 'My Next',
-        body: 'I would like to go to Spain'
-    },
-    {
-        title: 'Habbits to work on',
-        body: 'Exercise. Eating a bit better'
-    },
-    {
-        title: 'Office modifications',
-        body: 'Get a new seat'
-    }
-
-]
+let notes = []
 
 const filters = {
     searchText: ''
 }
+
+// Check for existing saved data
+const notesJSON = localStorage.getItem('notes')
+if (notesJSON != null) {
+    notes = JSON.parse(notesJSON)
+}
+
+
+
 
 const renderNotes = function (notes, filters) {
     const filteredNotes = notes.filter(function (note) {
@@ -32,41 +24,32 @@ const renderNotes = function (notes, filters) {
     
     filteredNotes.forEach(function(note){
         const noteElem = document.createElement('p') 
-        noteElem.textContent = note.title
+
+        if (note.title.lenth > 0) {
+            noteElem.textContent = note.title
+        } else {
+            noteElem.textContent = "Unnamed note"
+        }
+
+        
         document.querySelector('#notes').appendChild(noteElem)
     })
     
 }
 
-// const p = document.querySelector('p')
-// console.log(p)
-// p.remove()
 
 const ps = document.querySelectorAll('p')
-// ps.forEach(function(p){
-//     p.textContent = "**************" //3
-//     //2 console.log(p.textContent)
-//     //1 p.remove()
-// })
-// /* Add a new element */
-// const newParagraph = document.createElement('p')
 
-// newParagraph.textContent = "This is a new element from JavaScrip"
-
-// document.querySelector("body").appendChild(newParagraph)
-
-
-// document.querySelector('button').addEventListener('click', function(e) {
-//     e.target.textContent = "The button was clicked"
-// })
-// document.querySelectorAll('button')[1].addEventListener('click', function(e) {
-//     console.log('Deleted All Notes')
-// })
 
 renderNotes(notes,filters)
 
 document.querySelector('#create-note').addEventListener('click', function(e){
-    e.target.textContent = 'The button was CLICKED!'
+    notes.push({
+        title: '',
+        body: ''
+    })
+    localStorage.setItem('notes', JSON.stringify(notes))
+    renderNotes(notes, filters)
 })
 
 document.querySelector('#search-text').addEventListener('input', function(e){
