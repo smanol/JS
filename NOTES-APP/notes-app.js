@@ -1,63 +1,28 @@
 
-let notes = []
+
+const notes = getSavedNotes()
 
 const filters = {
     searchText: ''
 }
 
-// Check for existing saved data
-const notesJSON = localStorage.getItem('notes')
-if (notesJSON != null) {
-    notes = JSON.parse(notesJSON)
-}
+renderNotes(notes, filters)
 
-
-
-
-const renderNotes = function (notes, filters) {
-    const filteredNotes = notes.filter(function (note) {
-        return note.title.toLowerCase().includes(filters.searchText.toLowerCase())
-    })
-
-    document.querySelector('#notes').innerHTML = '<h3>Text</h3>'
-
-    
-    filteredNotes.forEach(function(note){
-        const noteElem = document.createElement('p') 
-
-        if (note.title.lenth > 0) {
-            noteElem.textContent = note.title
-        } else {
-            noteElem.textContent = "Unnamed note"
-        }
-
-        
-        document.querySelector('#notes').appendChild(noteElem)
-    })
-    
-}
-
-
-const ps = document.querySelectorAll('p')
-
-
-renderNotes(notes,filters)
-
-document.querySelector('#create-note').addEventListener('click', function(e){
+document.querySelector('#create-note').addEventListener('click', function (e) {
     notes.push({
+        id: uuidv4(), 
         title: '',
         body: ''
     })
-    localStorage.setItem('notes', JSON.stringify(notes))
+    saveNotes(notes)
     renderNotes(notes, filters)
 })
 
-document.querySelector('#search-text').addEventListener('input', function(e){
-//   console.log(e.target.value) 
+document.querySelector('#search-text').addEventListener('input', function (e) {
     filters.searchText = e.target.value
     renderNotes(notes, filters)
 })
 
-document.querySelector('#filter-by').addEventListener('change', function(e){
+document.querySelector('#filter-by').addEventListener('change', function (e) {
     console.log(e.target.value)
 })
