@@ -1,0 +1,56 @@
+<!DOCTYPE html> 
+<html>
+    <head>
+        
+    <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <h1>PAPPER</h1>
+        
+        <h2>Organize your literature notes</h2>
+
+
+            <table id='table' style="width:100%">
+                <tr>
+                    <th>Filename</th>
+                    <th>Comment</th>
+                    <th>Original</th>
+                    <th>Tags</th>
+                </tr>
+                <tr>
+                    <th><input id='search-filenames' placeholder='Filter Filename' type='text'></th>
+                    <th><input id='search-comments' placeholder='Filter Comment' type='text'></th>
+                    <th><input id='search-originals' placeholder='Filter Original' type='text'></th>
+                    <th><input id='search-hashtags' placeholder='Filter Tags' type='text'></th>
+                </tr>
+                <tbody id ='table_body'>
+
+                </tbody>
+                
+
+            </table>
+            <br>
+        <input type="file" name="files[]" id="fileUpload">
+    <section>
+        <div class="container" id='sources'>
+            <p draggable="true">hi <span title="I am hovering over the text">This is the text I want to have a mousover</span>
+ </p>   
+
+        </div>
+        <div class="container" id = 'sketch'>
+            hello
+        </div>
+
+        <button>Create</button>
+    </section>
+    
+           <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"
+            integrity="sha512-LGXaggshOkD/at6PFNcp2V2unf9LzFq6LE+sChH7ceMTDP0g2kn6Vxwgg7wkPP7AAtX+lmPqPdxB47A0Nz0cMQ=="
+            crossorigin="anonymous"></script>
+            <script src="upload-json.js"></script>
+            <script src="papper-functions.js"></script>
+            
+            
+            <script src="papper-app.js"></script> 
+            <script src="draggable-functions.js"></script>
+</html>

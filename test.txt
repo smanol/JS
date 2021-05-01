@@ -2,5 +2,5 @@ steps
 
 git status
 git add . 
-git commit -m "Add a message"
+git commit -m "Refactoring and adding the uuid library"
 git push origin master

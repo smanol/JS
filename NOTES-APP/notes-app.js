@@ -1,28 +1,45 @@
+'use strict'
 
 
-const notes = getSavedNotes()
+let notes = getSavedNotes()
 
 const filters = {
-    searchText: ''
+    searchText: '',
+    sortBy: 'byEdited'
 }
 
 renderNotes(notes, filters)
 
-document.querySelector('#create-note').addEventListener('click', function (e) {
+document.querySelector('#create-note').addEventListener('click', (e)=> {
+
+    const id = uuidv4()
+    const timestamp = moment().valueOf()
     notes.push({
-        id: uuidv4(), 
+        id: id, 
         title: '',
-        body: ''
+        body: '',
+        createdAt: timestamp,
+        updatedAt: timestamp
     })
     saveNotes(notes)
-    renderNotes(notes, filters)
+    location.assign(`/edit.html#${id}`)
 })
 
-document.querySelector('#search-text').addEventListener('input', function (e) {
+document.querySelector('#search-text').addEventListener('input', (e) => {
     filters.searchText = e.target.value
     renderNotes(notes, filters)
 })
 
-document.querySelector('#filter-by').addEventListener('change', function (e) {
-    console.log(e.target.value)
+document.querySelector('#filter-by').addEventListener('change',  (e) => {
+    filters.sortBy = e.target.value
+    renderNotes(notes, filters)
 })
+
+window.addEventListener('storage', (e) => {
+    console.log("Hello")
+    if (e.key === 'notes') {
+        notes = JSON.parse(e.newValue)
+        renderNotes(notes, filters)
+    } 
+})
+

@@ -1,60 +1,72 @@
+'use strict'
+
 // Fetch existing todos from localStorage
-const getSavedTodos = function () {
+const getSavedTodos = () => {
     const todosJSON = localStorage.getItem('todos')
-    if (todosJSON != null) {
-        return JSON.parse(todosJSON)
-    } else {
+    try {
+        return todosJSON ? JSON.parse(todosJSON) : []
+    } catch (e) {
         return []
     }
 }
 
 // Save todos to localStorage
-const saveTodos = function (todos) {
+const saveTodos = (todos) => {
     localStorage.setItem('todos', JSON.stringify(todos))
 }
 
 // Render application todos based on filters
-const renderTodos = function (todos, filters) {
-    const filteredTodos = todos.filter(function (todo) {
+const renderTodos = (todos, filters) => {
+    const filteredTodos = todos.filter((todo) => {
         searchTextMatch = todo.text.toLowerCase().includes(filters.searchText.toLowerCase())
         hideCompletedMatch = !filters.hideCompleted || !todo.completed
         
         return searchTextMatch && hideCompletedMatch
     })
 
-
-
-    const incompleteTodos = filteredTodos.filter(function (todo) {
-        return !todo.completed
-    })
-
+    const incompleteTodos = filteredTodos.filter((todo) => !todo.completed)
 
     document.querySelector('#todos').innerHTML = ''
+
     document.querySelector('#todos').appendChild(generateSummaryDOM(incompleteTodos))
 
-    filteredTodos.forEach(function (todo) {
+    filteredTodos.forEach((todo) => {
         document.querySelector('#todos').appendChild(generateTodoDOM(todo))
     })
 }
 
-//  1. Setup a root div
-//  2. Setup and append a checkbox (set type attribute)
-//  someNode.setAttribute('type', 'chechbox')
-//  3. Setup and append a span text (set text)
-//  4. Setup and append a button (set text)
+const toggleTodo = (id) => {
+    const todo = todos.find((todo) => todo.id === id)  
+    if (todo) {
+        todo.completed = !todo.completed
+    }
+}
 
-
+const removeTodo = (id) => {
+    const todoIndex = todos.findIndex((todo) => todo.id === id)
+    console.log(todoIndex)
+    if (todoIndex > -1) {
+        todos.splice(todoIndex, 1)
+    }
+}
 // Get the DOM elements for an individual note
 
-const generateTodoDOM = function (todo) {
+const generateTodoDOM = (todo) => {
 
     // Creating the div element
     const todoEl = document.createElement('div')
     
     // Creating and assigning the checkbox (input with attribute type=checkbox)
     const checkEl = document.createElement('input')
-    todoEl.appendChild(checkEl)
     checkEl.setAttribute('type', 'checkbox')
+    console.log(todo.completed + " " + todo.text)
+    checkEl.checked = todo.completed
+    checkEl.addEventListener('change', () => {
+        toggleTodo(todo.id)
+        saveTodos(todos)
+        renderTodos(todos,filters)
+    })
+    todoEl.appendChild(checkEl)
     
     // Creating and assigning the span paragraph element
     const span = document.createElement('span')
@@ -64,6 +76,12 @@ const generateTodoDOM = function (todo) {
     // Creating and assigning the button 
     const button = document.createElement('button')
     button.textContent = 'x'
+    button.addEventListener('click', () => {
+        console.log(todo.id)
+        removeTodo(todo.id)
+        saveTodos(todos)
+        renderTodos(todos, filters)
+    })
     todoEl.appendChild(button)
 
     // Returning the div Element
@@ -72,7 +90,7 @@ const generateTodoDOM = function (todo) {
 }
 // Get the DOM elements for the list summary
 
-const generateSummaryDOM = function (incompleteTodos) {
+const generateSummaryDOM = (incompleteTodos) => {
     const summary = document.createElement('h2')
     summary.textContent = `You have ${incompleteTodos.length} todos left`
     return summary 
